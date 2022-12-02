@@ -24,9 +24,7 @@ fun main(args: Array<String>) {
         C Z
     """.trimIndent()
 
-
     val input = testInput.filter { it.isLetter() }.toList()
-
 
     val rounds = mutableListOf<Pair<Char, Char>>()
 
