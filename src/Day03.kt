@@ -1,6 +1,10 @@
 data class Compartment(val items: List<Char>)
 
-data class Rucksack(val first: Compartment, val second: Compartment)
+data class Rucksack(val first: Compartment, val second: Compartment) {
+    val items get() = first.items + second.items
+}
+
+data class Group(val first: Rucksack, val second: Rucksack, val third: Rucksack)
 
 
 fun main() {
@@ -24,14 +28,10 @@ fun main() {
         )
     }
 
+    val groups = rucksacks.reduceToGroups()
 
-    val existsInBothCompartments: List<List<Char>> = rucksacks.map {
-        (it.first.items + it.second.items).findDuplicates()
-    }
-
-    val sum = existsInBothCompartments.sumOf { it.sumOf { char -> char.getAocValue() } }
-
-    println(sum)
+    val prioritizationValue = groups.map { it.findDuplicates() }.sumOf { it.sumOf { char -> char.getAocValue() } }
+    println(prioritizationValue)
 }
 
 fun List<Char>.mergeDuplicates(): List<Char> {
@@ -64,9 +64,37 @@ fun List<Char>.findDuplicates(): List<Char> {
 
 fun Char.getAocValue(): Int {
 
-    if (this.isUpperCase()) {
-        return this.minus("A".toCharArray()[0]) + 27
+    return if (this.isUpperCase()) {
+        this.minus("A".toCharArray()[0]) + 27
     } else {
-        return this.minus("a".toCharArray()[0]) + 1
+        this.minus("a".toCharArray()[0]) + 1
+    }
+}
+
+fun List<Rucksack>.reduceToGroups(): List<Group> {
+
+    val groups = mutableListOf<Group>()
+
+    for (i in 0 until this.size / 3) {
+        val k = i * 3
+        groups.add(
+            Group(
+                this[k],
+                this[k + 1],
+                this[k + 2]
+            )
+        )
+    }
+
+    return groups
+}
+
+fun Group.findDuplicates(): List<Char> {
+    val first = first.items.mergeDuplicates()
+    val second = second.items.mergeDuplicates()
+    val third = third.items.mergeDuplicates()
+
+    return first.filter {
+        first.contains(it) && second.contains(it) && third.contains(it)
     }
 }
