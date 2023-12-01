@@ -1,3 +1,5 @@
+package aoc_2022
+
 enum class PlayerSymbols(val value: Char) {
     ROCK("X".toCharArray()[0]),
     PAPER("Y".toCharArray()[0]),

@@ -1,3 +1,5 @@
+package aoc_2022
+
 data class Compartment(val items: List<Char>)
 
 data class Rucksack(val first: Compartment, val second: Compartment) {
