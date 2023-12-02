@@ -1,5 +1,7 @@
 package aoc_2022
 
+import readInput
+
 fun main() {
 
     val input = readInput("day4_test")
